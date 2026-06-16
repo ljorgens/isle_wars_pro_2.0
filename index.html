@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tempest Isles — A War of Nine Islands</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- ============ TITLE SCREEN ============ -->
+    <div id="title-screen">
+      <div class="t-waves" aria-hidden="true"></div>
+      <header class="t-head">
+        <div class="t-rule">⚓ ─────────── ✦ ─────────── ⚓</div>
+        <h1>TEMPEST<br />ISLES</h1>
+        <p class="t-sub">A War of Nine Islands</p>
+        <p class="t-flavor">
+          Forty-six countries. Nine islands. Four fleets.<br />
+          Earthquakes, floods and rebellion answer to no admiral.
+        </p>
+      </header>
+
+      <form id="setup" class="t-card">
+        <div class="opt">
+          <label>Crews at the table</label>
+          <div class="seg" data-name="humans">
+            <button type="button" data-v="1" class="on">1 vs 3 AI</button>
+            <button type="button" data-v="2">2 Humans</button>
+            <button type="button" data-v="3">3 Humans</button>
+            <button type="button" data-v="4">4 Humans</button>
+          </div>
+        </div>
+        <div class="opt">
+          <label>Rank of your foes</label>
+          <div class="seg" data-name="difficulty">
+            <button type="button" data-v="0">Ensign</button>
+            <button type="button" data-v="1" class="on">Captain</button>
+            <button type="button" data-v="2">Commodore</button>
+            <button type="button" data-v="3">Admiral</button>
+          </div>
+        </div>
+        <div class="opt">
+          <label>Your colors</label>
+          <div class="seg" data-name="color">
+            <button type="button" data-v="0" class="on">Cobalt</button>
+            <button type="button" data-v="1">Gold</button>
+            <button type="button" data-v="2">Crimson</button>
+            <button type="button" data-v="3">Jade</button>
+          </div>
+        </div>
+        <div class="opt">
+          <label>Starting armies</label>
+          <div class="seg" data-name="armies">
+            <button type="button" data-v="22">Lean</button>
+            <button type="button" data-v="35" class="on">Standard</button>
+            <button type="button" data-v="50">Heavy</button>
+          </div>
+        </div>
+        <div class="opt">
+          <label>Temper of the isles (disasters)</label>
+          <div class="seg" data-name="disaster">
+            <button type="button" data-v="0.08">Calm</button>
+            <button type="button" data-v="0.16" class="on">Restless</button>
+            <button type="button" data-v="0.28">Wrathful</button>
+            <button type="button" data-v="0.45">Cataclysm</button>
+          </div>
+        </div>
+        <div class="opt">
+          <label>Exiles can return (comeback rule)</label>
+          <div class="seg" data-name="revive">
+            <button type="button" data-v="0" class="on">Off</button>
+            <button type="button" data-v="1">On</button>
+          </div>
+        </div>
+        <div class="opt">
+          <label>Pace</label>
+          <div class="seg" data-name="speed">
+            <button type="button" data-v="1.5">Stately</button>
+            <button type="button" data-v="1" class="on">Brisk</button>
+            <button type="button" data-v="0.45">Gale</button>
+          </div>
+        </div>
+        <button type="submit" class="btn primary big" id="btn-sail">⚔ &nbsp;Set Sail</button>
+        <div id="t-scores"></div>
+      </form>
+
+      <footer class="t-foot">
+        An original tribute to Soleau Software's <em>Isle Wars Pro</em> (2002) · all-new code, map &amp; art
+      </footer>
+    </div>
+
+    <!-- ============ GAME SCREEN ============ -->
+    <div id="game-screen" hidden>
+      <header id="topbar">
+        <div class="brand">TEMPEST ISLES</div>
+        <div id="players"></div>
+        <button class="btn ghost small" id="btn-stop" hidden>⏸ Stop Playing</button>
+      </header>
+
+      <div id="map-wrap">
+        <svg id="map" role="img" aria-label="Map of the Tempest Isles"></svg>
+      </div>
+
+      <footer id="bottombar">
+        <div id="info-left" class="info-box"></div>
+        <div id="center-stack">
+          <div id="prompt"></div>
+          <div id="controls"></div>
+          <div id="ticker"></div>
+        </div>
+        <div id="info-right" class="info-box"></div>
+      </footer>
+
+      <nav id="menubar">
+        <button class="mbtn" id="m-new">New Game</button>
+        <button class="mbtn" id="m-help">Help</button>
+        <button class="mbtn" id="m-cards">Cards</button>
+        <button class="mbtn" id="m-scores">Scores</button>
+        <button class="mbtn" id="m-sound">Sound</button>
+        <button class="mbtn" id="m-quit">Quit</button>
+      </nav>
+    </div>
+
+    <div id="banner"></div>
+    <div id="modal-scrim" hidden>
+      <div id="modal"></div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

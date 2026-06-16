@@ -1,0 +1,267 @@
+                       ISLE WARS PRO GAME DIRECTIONS
+                                Version 1.01
+                           by Soleau Software, Inc.
+
+                              A Member of the                
+                          Association of Shareware   
+                            Professionals (ASP)
+
+  
+OBJECTIVE
+
+The object of Isle Wars is to conquer all nine islands with your armies.   
+        
+Isle Wars Pro is quite simple to learn and offers different levels of play.  
+There are many elements which you will have to contend with, in order to 
+conquer all 9 islands.
+
+
+GAME PLAY
+
+At the start of a new game you can set different options such as level of 
+difficulty, color to play, number of starting armies possible, frequency of 
+natural disasters and game speed. (In the unregistered version you play Blue 
+and the computer will play the other three opponents.)
+ 
+When the game starts the game board will appear and distribute the various 
+armies. The game will then randomly decide who will take the first turn. 
+At the beginning of each turn, you are given armies for the number of 
+countries you occupy.  That number is divided by 3 and gives you that 
+number of armies to place onto the board.  Each island gives you extra 
+armies, if you totally control all its countries.  The island values are 
+shown below.
+
+                                      2
+                                  8
+                        2    4    3      5
+                           4       5
+                                       2
+
+
+PLACING ARMIES
+
+You will be shown the number of armies you have received for that turn. 
+(Minimum is 2)  The computer will ask you to select the destination 
+country to receive the new armies.  Click on the army of the country you 
+want to add to (an arrow will point to the selected country) At the bottom 
+of the screen, you will have buttons to decide how many you want to deploy 
+in that country. Keep placing armies until you have no more armies to 
+place.  (The game prompts you with all instructions at the bottom of 
+the screen... don't worry, it's quite easy to get the hang of it very quickly)
+
+
+ATTACKING
+
+Once you have placed all your armies, new buttons will be displayed at 
+the bottom.
+
+[ATTACK]   [MOVE]   [PASS]   [CARDS]   [CANCEL]
+
+To attack another country, it must be adjacent to the country you're 
+attacking from.  There are lines from island to island which allow you to 
+travel across the water (in ships) to attack other islands.  You can 
+only attack another grid if your total number of armies in that grid is 
+equal or greater than the number you're attacking.
+
+Click the mouse on ATTACK and the computer will ask you to click on the 
+country you want to attack.  When that country is selected, then click 
+on the territory you want to attack from. (Remember you are playing BLUE 
+in the Unregistered Version.)
+
+The computer then rolls dice (not shown), to decide the outcome.  If the 
+attacking army has a higher number than the defending army, then one 
+army will be subtracted from the defending country; and the opposite is 
+true if the attacking army is defeated.  A tie will count as a loss for the 
+attacking army, so the defending country carries the advantage.  At higher 
+levels of army concentrations like 60 against 40, the computer will 
+speed up play by rolling about 5 times before asking you whether you 
+want to attack again.  There are two buttons which are shown while 
+attacking:   [ATTACK]   [QUIT ATTACK]   Keep clicking on ATTACK if you 
+want to continue attacking.  If you want to call off the attack, click 
+the [QUIT ATTACK] button. If your attacking army ever gets down to 1, 
+then you will forfeit not only the turn, but also the country to the 
+defending army.  That means if you have 2 troops left and are attacking 
+an opposing country with 1 and you lose, it now becomes occupied by your 
+enemy and play then passes to the next player.
+
+If you can deplete the enemy to 0 armies, the computer will ask you how 
+many troops you want to move in from the armies you have left.  Select 
+the number as you do when you deploy your troops. The only stipulation 
+is that you have to move at least one army into the conquered territory.
+You can then continue to attack etc... until you decide to finish your 
+turn by pressing, either the [MOVE] button or the [PASS] button.
+
+
+MOVE
+
+At the end of each turn you are allowed to move troops between two adjacent 
+countries.  Select the number as usual from the select number panel.
+
+
+PASS
+
+If you do not want to move armies, simply press the [PASS] button to 
+indicate your turn is over.
+
+
+CANCEL
+
+Press this button if you change your mind on attack moving, etc...   
+
+
+
+GAME CARDS
+
+If during your turn, you defeated an opposing army and captured a country 
+then you will be given a card displayed on the bottom right of the screen.  
+These bonus cards are for extra bonus armies, bombs, anti-bombs etc... 
+The [CARD] button at the of the screen bottom shows you what cards you 
+presently have in your hand.
+ 
+     
+5/8/15 Bonus Armies:  Adds this many armies to your total at the beginning 
+of your turn.
+
+Double:  This card doubles your placement total at the start of your turn.
+
+Bomb:   Allows you to bomb any country.  The effects of the bomb will be 
+shown in then new value of troops shown in that opposing country.
+
+Anti-Bomb:   This protects you from a bomb drop on your own countries from 
+the other players. If you have only one Anti-Bomb card in your hand, it 
+will protect you from a opposing bomb.  If used it will then be eliminated 
+from your hand automatically.  
+
+Lose All Cards:   If you draw this card, then your cards are all taken away.
+
+Wild Card:    Matches any other card.
+
+
+TRADING IN CARDS
+
+To Trade in cards, the computer will inform you automatically at the start 
+of your turn whether or not you have a possible match.  A match is 3 cards 
+which are the same.
+
+For example:      8 Armies / 8 Armies / 8 Armies
+
+                  or 8 Armies / Wild / 8 Armies
+
+                  or Wild / Wild / 8 Armies
+
+                  (3 Wild cards are not a match)
+
+If you have a set, they must be exchanged at the top of your turn.  You will 
+only have one opportunity to decide if this is what you want.  The computer 
+will show your cards and ask you to click on the ones you want to trade in. 
+When you click on a card it will be highlighted in yellow.  You can deselect 
+a card by clicking on it again.  Once you have selected the three cards  
+click on the green [Trade In Cards] button. 
+  
+You can only hold 5 cards in your hand at once.  If you have more then 5, 
+the computer will ask you which card you want to discard.  Click on the card 
+to eliminate to make room for you new card.
+
+
+SITUATIONS / DISASTERS / PRODUCTION CENTERS
+
+At various times during the game, certain events will occur.  These will have 
+a dramatic impact on the game play.  These events are random, and you cannot 
+predict them!  They are as follows:
+
+
+1 = An Earthquake has hit the Islands  (3 or 4 grids)
+2 = Flooding has inundated some grids  (3 or 4 grids)
+3 = A rebellion has occurred in one of the countries.
+4 = Rebels have taken control from an opposing army. The country changes hands.
+5 = Production Centers move to other locations
+6 = Production Center increase.  Armies located on the Production Centers will 
+be doubled. Production centers are indicated by a light blue color shown for the 
+army total instead of the normal white.  
+  
+If the message is one of the first four, Hold On! , it could hit in countries 
+that you occupy.  The computer will indicate which territories are hit and 
+some armies will be decreased in those countries.  If it says Production Center 
+Increase and you happen to occupy it, then your number of armies will double 
+in that country.
+
+END OF GAME
+
+If you are eliminated from the game board by the computer's other 
+Armies you will be shown a special menu that will allow you to concede 
+that game and play another one.  (The score will be recorded as a loss on 
+that level)  You can also have the computer play the game out to find out 
+who will eventually be the victor.  The computer will play at a very fast 
+pace. You can halt the game at any point by clicking on the [Stop Playing] 
+button which will appear at the bottom of the game board.
+
+If you are the victor, the game will end and the new score totals are shown.
+
+
+GAME BUTTONS
+
+New Game:  Begins a new game.   
+
+Help: Game Directions
+
+Options:  Change various setup configurations and sound options.
+
+Soleau Games:  Information about Soleau Software.
+
+Scores:  Isle Wars Pro Scoreboard.
+ 
+Quit:  You can quit the game at any time and begin a new one, however, 
+if you decide to quit in the middle of a game and you do not control at 
+least 10 countries then your score WILL be recorded as a loss at that level. 
+  
+The best way to learn is to just begin to play.  It takes only a few minutes 
+to master the commands and it will take hours to learn the best strategies 
+to defeat your opponents.  Games average from 8 to 45 minutes 
+(I've had one last 3 hours!) depending on your speed level.
+
+
+           ****  ISLE WARS PRO REGISTERED VERSION  **** 
+
+The registered version of ISLE WARS PRO allows for up to four human players 
+to compete against each other.  You can control various options such as 
+starting levels of armies, frequency of disasters, clearing scoreboards, 
+and changing your color to play and more...
+ 
+You are encouraged to pass the Shareware version of ISLE WARS PRO along 
+to your friends or onto the Internet.  Soleau Software depends upon your 
+registrations to continue producing non-violent strategy logic game software 
+for the computer market.  Please support our work by registering your copy today!
+
+The registered version of ISLE WARS PRO is only $18 (U.S.)  You can send 
+the order form to your printer from the closing screen of the game or you 
+can use the Order.txt file. 
+
+If paying by Credit Card, we can even upgrade your copy instantly over the phone 
+so you won't have to wait for the mail!
+
+You can also order online from our Secure Web site at  www.soleau.com and have 
+the unlock codes sent via e-mail in just minutes !!!  Don't want to order online
+order over the phone at the voice number below.
+
+     
+                               
+                        ORDER TODAY --  IT'S EASY !!!
+                     We accept MasterCard & Visa & Amex
+                         U.S. and Canadian Checks 
+                          and P.O. Money orders
+                    
+                     Call, Send or Fax your Order Form
+                 Voice: 212.721.2361     Fax: 212.873.4994
+
+                      You can also Order via our Website !!!
+                              www.soleau.com
+
+
+                             Soleau Software, Inc.  
+                           163 Amsterdam Ave # 213
+                            New York , NY  10023
+
+                                               soleau@soleau.com
+
+
+    

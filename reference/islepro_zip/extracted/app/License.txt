@@ -1,0 +1,18 @@
+SOLEAU SOFTWARE, INC.
+END USER LICENSE AGREEMENT
+
+CAREFULLY READ THE TERMS AND CONDITIONS OF THIS END USER LICENSE AGREEMENT ("AGREEMENT") BEFORE INSTALLING THIS SOFTWARE.  IT CONTAINS IMPORTANT TERMS AND CONDITIONS ABOUT YOUR USE AND OUR OBLIGATIONS WITH RESPECT TO THE SOFTWARE.  IF YOU ACCEPT AND AGREE TO THESE TERMS AND CONDITIONS, CLICK THE "YES" BUTTON.  IF YOU ARE NOT WILLING TO ACCEPT AND AGREE TO THESE TERMS AND CONDITIONS, CLICK THE "NO" BUTTON. 
+
+1.	License.  Soleau Software, Inc. ("Soleau") hereby grants to you, and you accept, a limited, nonexclusive license to use this ISLE WARS PRO evaluation computer software program in machine-readable, object code form only (the "Software").  Except for the rights specifically granted in this Agreement, Soleau retains all right, title and interest (including, without limitation, copyright and other intellectual property rights) in and to the Software.
+
+2.	Restrictions.  You agree that you will not modify, alter, reverse engineer, decompile or otherwise translate the Software, and that you will not sell the Software.
+
+3.	Term; Termination.  This License Agreement is effective upon your clicking the "OK" button, as described above, and shall continue until terminated.  This Agreement shall be terminated automatically if you fail to comply with any of the terms and conditions of this Agreement.  This Agreement may also be terminated at any time upon notice from Soleau.  Upon termination, you agree to destroy the Software (and all copies thereof) and erase any copies residing on computer equipment.
+
+4.	No Warranties.   THE SOFTWARE IS LICENSED "AS IS" AND SOLEAU DISCLAIMS ANY AND ALL WARRANTIES WITH REGARD TO THE SOFTWARE (WHETHER EXPRESS OR IMPLIED), INCLUDING WITHOUT LIMITATION ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, INFRINGEMENT OR TITLE, OR ANY WARRANTY OF THE QUALITY FUNCTIONALITY, OPERABILITY, ACCURACY, EFFORT, USE OR PERFORMANCE OF THE SOFTWARE.
+
+5.	Limitation of Liability.  YOU ASSUME ALL RESPONSIBILITY FOR AND ALL RISK OF DAMAGE OR INJURY THAT MAY OCCUR WHILE USING THE SOFTWARE.  UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY (WHETHER TORT, CONTRACT OR OTHERWISE) SHALL SOLEAU BE LIABLE FOR ANY DIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES WHATSOEVER (INCLUDING WITHOUT LIMITATION DAMAGES FOR BUSINESS INTERRUPTION, COMPUTER FAILURE OR MALFUNCTION, LOSS OF BUSINESS PROFITS, GOODWILL OR INFORMATION, OR ANY OTHER PECUNIARY LOSS OF DAMAGE) ARISING OUT OF OR RELATING TO THE SOFTWARE (INCLUDING WITHOUT LIMITATION USE OR INABILITY TO USE THE SOFTWARE), EVEN IF SOLEAU HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+6.	Qualification.  Some jurisdictions do not allow the provisions described in Section 4 or 5, so those limitations may not apply to you.  This Agreement gives you specific legal rights and you may also have different or additional legal rights, depending on the applicable law in your jurisdiction.
+
+7.	Governing Law.  This Agreement and any dispute or controversy arising out of or relating thereto shall in all respects be governed by and construed in accordance with the laws of the State of the State of New York, excluding its conflicts of laws principles.
