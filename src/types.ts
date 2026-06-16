@@ -26,6 +26,15 @@ export interface Settings {
   turnLimit?: number; // safety cap for headless simulation
 }
 
+/** A single line in the running game log the player can review at any time. */
+export type LogTone = 'turn' | 'combat' | 'event' | 'card' | 'info';
+
+export interface LogEntry {
+  round: number; // game round (turn ÷ players), as shown to the player
+  text: string;
+  tone: LogTone;
+}
+
 export interface GameState {
   owner: number[]; // country id -> player id
   armies: number[]; // country id -> troop count
@@ -34,6 +43,7 @@ export interface GameState {
   current: number;
   turn: number;
   fastPlayout: boolean;
+  log: LogEntry[]; // chronological record of every action this game
 }
 
 export const COLORS = [

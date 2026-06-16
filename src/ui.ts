@@ -1,7 +1,7 @@
 // DOM interaction layer implementing the GameUI contract used by the engine.
 import type { GameUI } from './engine';
 import type { Renderer } from './render';
-import { AmountResult, CARD_HINT, CARD_LABEL, CardFace, GameState, Player } from './types';
+import { AmountResult, CARD_HINT, CARD_LABEL, CardFace, GameState, LogEntry, LogTone, Player } from './types';
 import { sfx } from './sfx';
 
 const $ = <T extends HTMLElement>(sel: string) => document.querySelector(sel) as T;
@@ -19,6 +19,10 @@ export class Ui implements GameUI {
 
   bind(st: GameState) {
     this.st = st;
+    // Reset the on-screen log panel for the new game and replay any entries.
+    const stream = $('#log-stream');
+    stream.innerHTML = '';
+    for (const e of st.log) this.appendLogLine(e);
   }
 
   // ---------- core surfaces ----------
@@ -68,6 +72,26 @@ export class Ui implements GameUI {
     log.classList.remove('tick-in');
     void log.offsetWidth;
     log.classList.add('tick-in');
+  }
+
+  /** Append a line to the running game log shown in the panel below the map. */
+  log(text: string, tone: LogTone = 'info') {
+    const round = this.st ? Math.ceil(this.st.turn / this.st.players.length) : 1;
+    const entry: LogEntry = { round, text, tone };
+    this.st?.log.push(entry);
+    this.appendLogLine(entry);
+  }
+
+  /** Render one log entry into the fixed-height panel, keeping the view pinned
+   *  to the newest line unless the player has scrolled up to read history. */
+  private appendLogLine(e: LogEntry) {
+    const stream = $('#log-stream');
+    const atBottom = stream.scrollHeight - stream.scrollTop - stream.clientHeight < 40;
+    const div = document.createElement('div');
+    div.className = e.tone === 'turn' ? 'log-turn' : `log-line log-${e.tone}`;
+    div.textContent = e.text;
+    stream.appendChild(div);
+    if (atBottom) stream.scrollTop = stream.scrollHeight;
   }
 
   wait(ms: number) {
@@ -200,6 +224,41 @@ export class Ui implements GameUI {
         setTimeout(res, 180);
       }, hold),
     );
+  }
+
+  /** Flip up the card a human just drew so they see what they got. Auto-dismisses
+   *  after a beat (scaled by pace); clicking dismisses it early. */
+  revealCard(card: CardFace | 'loseall'): Promise<void> {
+    const mutiny = card === 'loseall';
+    const label = mutiny ? '☠ Mutiny' : CARD_LABEL[card];
+    const hint = mutiny ? 'Your entire hand is cast overboard!' : CARD_HINT[card];
+    if (mutiny) sfx.rout();
+    else sfx.chime();
+    const el = $('#card-reveal');
+    el.innerHTML = `<div class="reveal-inner ${mutiny ? 'mutiny' : ''}">
+        <div class="reveal-cap">You drew</div>
+        <div class="reveal-card">${label}</div>
+        <div class="reveal-hint">${hint}</div>
+      </div>`;
+    el.hidden = false;
+    void el.offsetWidth; // restart the flip animation
+    el.classList.add('show');
+    const hold = 1600 * this.speed;
+    return new Promise((res) => {
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        el.classList.remove('show');
+        el.removeEventListener('click', finish);
+        setTimeout(() => {
+          el.hidden = true;
+          res();
+        }, 200);
+      };
+      el.addEventListener('click', finish);
+      setTimeout(finish, hold);
+    });
   }
 
   // ---------- map effects (delegate) ----------

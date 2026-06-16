@@ -154,8 +154,8 @@ $('#m-help').addEventListener('click', () => {
       stack is <em>equal or greater</em> than the defender's. Each clash costs the loser one army — ties favor
       the defender. <em>Beware:</em> if your attacking force is ever worn down to a single army, you forfeit
       your turn <em>and the country itself</em> to the defender. Use <strong>Auto</strong> to roll
-      repeatedly without clicking — it stops the moment the battle resolves or reaches the brink
-      (your force down to 2, or the defender down to 1), handing each remaining clash back to you.</p>
+      repeatedly without clicking — it stops the moment the battle resolves or your force is worn
+      down to 2 (where the next loss would cost you the country), handing the clash back to you.</p>
       <p><strong>Conquest.</strong> Reduce a defender to zero and march at least one army in. Capture any
       country during your turn and you draw a card.</p>
       <p><strong>Cards.</strong> Trade three matching cards (wilds count) at the start of a turn for armies.

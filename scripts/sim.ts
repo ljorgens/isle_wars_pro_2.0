@@ -22,6 +22,8 @@ const stub: GameUI = {
   infoLeft() {},
   infoRight() {},
   toast() {},
+  log() {},
+  revealCard: () => Promise.resolve(),
   shake() {},
   flash() {},
   floatText() {},

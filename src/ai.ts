@@ -29,6 +29,7 @@ export async function aiTurn(g: Game, p: Player) {
     tradeArmies = g.setValue(set);
     g.removeCards(p, set);
     g.ui.toast(`${p.name} trades a set for ${tradeArmies} armies.`);
+    g.ui.log(`${p.name} traded a card set for ${tradeArmies} armies.`, 'card');
   }
 
   // Bombard (Commodore+): prefer the strongest enemy stack we actually border
@@ -60,9 +61,12 @@ export async function aiTurn(g: Game, p: Player) {
       p.cards.splice(rally, 1);
       total *= 2;
       g.ui.toast(`${p.name} sounds the rally — reinforcements doubled.`);
+      g.ui.log(`${p.name} played Rally — reinforcements doubled.`, 'card');
     }
   }
 
+  const islandNote = r.islands.length ? ` (${r.islands.join(', ')})` : '';
+  g.ui.log(`${p.name} mustered ${total} reinforcements${islandNote}.`, 'info');
   placeArmies(g, p, total, d);
   g.ui.refresh();
   await g.ui.wait(tick(g));
@@ -77,6 +81,10 @@ export async function aiTurn(g: Game, p: Player) {
     battles++;
     const { from, to } = plan;
     g.ui.infoLeft(`${p.name}: country ${from + 1} attacks ${to + 1}`);
+    g.ui.log(
+      `${p.name} attacked country ${to + 1} (${g.st.armies[to]}) from country ${from + 1} (${g.st.armies[from]}).`,
+      'combat',
+    );
     const result = await fightOut(g, p, from, to);
     if (result === 'forfeit') return;
     g.ui.refresh();
@@ -250,5 +258,6 @@ function fortify(g: Game, p: Player) {
     const amt = g.st.armies[best.from] - 1;
     g.st.armies[best.from] -= amt;
     g.st.armies[best.to] += amt;
+    g.ui.log(`${p.name} moved ${amt} ${amt === 1 ? 'army' : 'armies'} from country ${best.from + 1} to country ${best.to + 1}.`, 'info');
   }
 }

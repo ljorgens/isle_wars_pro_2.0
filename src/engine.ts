@@ -1,7 +1,7 @@
 // Core game engine: turn loop, combat, cards, disasters, production centers.
 // Rules follow RULES_SPEC.md (derived from the original Isle Wars Pro manual).
 import type { WorldMap } from './geometry';
-import { AmountResult, CardFace, GameState, HAND_LIMIT, Player, Settings } from './types';
+import { AmountResult, CardFace, GameState, HAND_LIMIT, LogTone, Player, Settings } from './types';
 import { aiTurn } from './ai';
 
 export interface GameUI {
@@ -21,6 +21,8 @@ export interface GameUI {
   }): Promise<AmountResult>;
   banner(title: string, sub?: string, tone?: 'storm' | 'war' | 'gold'): Promise<void>;
   toast(text: string): void;
+  log(text: string, tone?: LogTone): void;
+  revealCard(card: CardFace | 'loseall'): Promise<void>;
   shake(ids: number[]): void;
   flash(ids: number[], color?: string): void;
   floatText(id: number, text: string, color?: string): void;
@@ -46,6 +48,9 @@ const DRAW_POOL: (CardFace | 'loseall')[] = [
 export const rnd = (n: number) => Math.floor(Math.random() * n);
 export const pickRandom = <T>(arr: T[]): T => arr[rnd(arr.length)];
 
+/** Possessive form of a captain's name — "You" becomes "Your", not "You's". */
+export const possessive = (name: string) => (name === 'You' ? 'Your' : `${name}'s`);
+
 export class Game {
   st: GameState;
   capturedThisTurn = false;
@@ -65,6 +70,7 @@ export class Game {
       current: 0,
       turn: 1,
       fastPlayout: false,
+      log: [],
     };
   }
 
@@ -87,6 +93,7 @@ export class Game {
     // Production centers: 5 scattered countries.
     this.st.prodCenters = this.shuffledCountries().slice(0, 5);
     this.st.current = rnd(this.players.length);
+    this.ui.log(`The war for the Tempest Isles begins — ${this.players[this.st.current].name} sails first.`, 'turn');
   }
 
   shuffledCountries(): number[] {
@@ -141,15 +148,22 @@ export class Game {
 
   // ---------- cards ----------
 
-  drawCard(p: Player) {
+  async drawCard(p: Player) {
     const card = pickRandom(DRAW_POOL);
+    // Reveal the actual card to a human (never during a watched playout) so they
+    // know what landed in their hand; the AI just gets a ticker line.
+    const reveal = p.human && !this.st.fastPlayout;
     if (card === 'loseall') {
       p.cards = [];
       this.ui.toast(`${p.name} draws MUTINY — their whole hand is lost!`);
+      this.ui.log(`${p.name} drew MUTINY — their whole hand was lost.`, 'card');
+      if (reveal) await this.ui.revealCard('loseall');
       return;
     }
     p.cards.push(card);
     this.ui.toast(`${p.name} draws a card.`);
+    this.ui.log(`${p.name} drew a card for capturing territory.`, 'card');
+    if (reveal) await this.ui.revealCard(card);
   }
 
   /** Best tradeable set, or null. Sets: three army cards of one face, wilds wild. */
@@ -189,6 +203,7 @@ export class Game {
     if (wardIdx >= 0) {
       victim.cards.splice(wardIdx, 1);
       await this.ui.banner('BOMBARDMENT WARDED', `${victim.name}'s ward absorbs the blast over country ${target + 1}.`, 'gold');
+      this.ui.log(`${attacker.name} bombarded country ${target + 1}, but ${victim.name}'s ward absorbed the blast.`, 'combat');
       this.ui.refresh();
       return;
     }
@@ -197,6 +212,7 @@ export class Game {
     this.ui.shake([target]);
     this.ui.floatText(target, `−${before - this.st.armies[target]}`, '#ff9c5b');
     await this.ui.banner('BOMBARDMENT', `${attacker.name} shells country ${target + 1}!`, 'war');
+    this.ui.log(`${attacker.name} bombarded country ${target + 1} — ${before - this.st.armies[target]} armies lost.`, 'combat');
     this.ui.refresh();
   }
 
@@ -247,6 +263,10 @@ export class Game {
       `The attack collapses — country ${from + 1} falls to ${this.players[defenderOwner].name}.`,
       'war',
     );
+    this.ui.log(
+      `${possessive(this.players[attackerOwner].name)} attack collapsed — country ${from + 1} routed to ${this.players[defenderOwner].name}.`,
+      'combat',
+    );
     this.ui.refresh();
     this.checkElimination(attackerOwner);
   }
@@ -275,6 +295,10 @@ export class Game {
     }
     this.st.armies[to] = moveIn;
     this.st.armies[from] -= moveIn;
+    this.ui.log(
+      `${p.name} captured country ${to + 1} from ${this.players[prevOwner].name} (marched ${moveIn} in from country ${from + 1}).`,
+      'combat',
+    );
     this.ui.refresh();
     this.checkElimination(prevOwner);
   }
@@ -286,6 +310,7 @@ export class Game {
       p.bankedCards = p.cards; // kept in case the Exiles Return event brings them back
       p.cards = [];
       this.ui.toast(`☠ ${p.name} has been swept from the isles!`);
+      this.ui.log(`☠ ${p.name} was swept from the isles — eliminated.`, 'event');
     }
   }
 
@@ -332,6 +357,7 @@ export class Game {
     await this.ui.wait(850);
     this.ui.arrow(null);
     this.ui.toast(`${exile.name} returns to the war — country ${cid + 1} torn from ${formerOwner.name}.`);
+    this.ui.log(`✦ ${exile.name} returned from exile, seizing country ${cid + 1} from ${formerOwner.name}.`, 'event');
     return true;
   }
 
@@ -395,6 +421,7 @@ export class Game {
         await beat(440); // one country at a time — let the eye follow the sweep
       }
       this.ui.toast(`${name} guts ${toll} ${toll === 1 ? 'army' : 'armies'} across ${hits.length} countries.`);
+      this.ui.log(`${name} struck — ${toll} ${toll === 1 ? 'army' : 'armies'} lost across ${hits.length} countries.`, 'event');
       await beat(550);
     } else if (type === 2) {
       const cid = pickRandom(land);
@@ -409,6 +436,7 @@ export class Game {
       this.ui.shake([cid]);
       this.ui.refresh();
       if (lost > 0) this.ui.floatText(cid, `−${lost}`, '#ffb27a');
+      this.ui.log(`Rebellion in country ${cid + 1} — ${lost} ${lost === 1 ? 'army' : 'armies'} lost.`, 'event');
       await beat(750);
       this.ui.arrow(null);
     } else if (type === 3) {
@@ -429,6 +457,7 @@ export class Game {
         await beat(800);
         this.ui.arrow(null);
         this.ui.toast(`Country ${cid + 1} throws off ${this.players[oldOwner].name} and joins ${newOwner.name}!`);
+        this.ui.log(`Rebel takeover — country ${cid + 1} threw off ${this.players[oldOwner].name} and joined ${newOwner.name}.`, 'event');
         this.checkElimination(oldOwner);
       }
     } else if (type === 4) {
@@ -440,9 +469,11 @@ export class Game {
       this.ui.refresh();
       this.ui.flash(this.st.prodCenters, '#7fd4ff'); // new anchors light up
       for (const cid of this.st.prodCenters) this.ui.floatText(cid, '⚓', '#7fd4ff');
+      this.ui.log(`Trade winds shifted — production centers drifted to countries ${this.st.prodCenters.map((c) => c + 1).join(', ')}.`, 'event');
       await beat(750);
     } else {
       await this.ui.banner('✦ PRODUCTION SURGE ✦', 'The forges roar — every production center doubles!', 'gold');
+      this.ui.log('Production surge — every production center doubled its garrison.', 'event');
       for (const cid of this.st.prodCenters) {
         const gain = this.st.armies[cid];
         this.st.armies[cid] = Math.min(999, this.st.armies[cid] * 2);
@@ -470,10 +501,11 @@ export class Game {
         const p = this.players[this.st.current];
         if (p.alive) {
           this.capturedThisTurn = false;
+          this.ui.log(`— Round ${Math.ceil(this.st.turn / this.players.length)}: ${possessive(p.name)} turn —`, 'turn');
           if (p.human && !this.st.fastPlayout) await this.humanTurn(p);
           else await aiTurn(this, p);
           if (this.capturedThisTurn) {
-            this.drawCard(p);
+            await this.drawCard(p);
             await this.enforceHandLimit(p);
           }
           const w = this.winner();
@@ -527,6 +559,7 @@ export class Game {
         tradeArmies = this.setValue(set);
         this.removeCards(p, set);
         this.ui.toast(`Set traded for ${tradeArmies} armies.`);
+        this.ui.log(`${p.name} traded a card set for ${tradeArmies} armies.`, 'card');
       }
     }
 
@@ -538,9 +571,11 @@ export class Game {
       p.cards.splice(rally, 1);
       total *= 2;
       this.ui.toast('Rally! Your reinforcements are doubled.');
+      this.ui.log(`${p.name} played Rally — reinforcements doubled.`, 'card');
     }
     const islandNote = r.islands.length ? ` (${r.islands.join(', ')})` : '';
     this.ui.infoRight(`Reinforcements: ${total}${islandNote}`);
+    this.ui.log(`${p.name} mustered ${total} reinforcements${islandNote}.`, 'info');
 
     // 3. Place armies. Clicking another of your countries while the stepper
     // is open re-targets the deployment; Cancel returns to country picking.
@@ -570,24 +605,34 @@ export class Game {
         continue;
       }
       this.st.armies[cid] += res.value;
+      this.ui.log(`${p.name} deployed ${res.value} ${res.value === 1 ? 'army' : 'armies'} to country ${cid + 1}.`, 'info');
       remaining -= res.value;
       cid = null;
       this.ui.refresh();
     }
 
-    // 4. Action phase.
+    // 4. Action phase. If the player is holding a card they can actually play
+    // now (Bombard), open the hand once up front so the option is in front of
+    // them rather than tucked behind the Cards button.
+    let offerCards = p.cards.includes('bomb');
     while (true) {
       this.ui.infoLeft('');
       this.ui.infoRight('');
       const canAttack = this.attackableTargets(p.id).length > 0;
       const hasBomb = p.cards.includes('bomb');
-      this.ui.prompt('Issue your orders.');
-      const choice = await this.ui.buttons([
-        ...(canAttack ? [{ label: 'Attack', id: 'attack', kind: 'primary' as const }] : []),
-        { label: 'Move', id: 'move' },
-        { label: 'Pass', id: 'pass' },
-        { label: `Cards (${p.cards.length})`, id: 'cards', kind: 'ghost' as const },
-      ]);
+      let choice: string;
+      if (offerCards && hasBomb) {
+        offerCards = false;
+        choice = 'cards';
+      } else {
+        this.ui.prompt('Issue your orders.');
+        choice = await this.ui.buttons([
+          ...(canAttack ? [{ label: 'Attack', id: 'attack', kind: 'primary' as const }] : []),
+          { label: 'Move', id: 'move' },
+          { label: 'Pass', id: 'pass' },
+          { label: `Cards (${p.cards.length})`, id: 'cards', kind: 'ghost' as const },
+        ]);
+      }
 
       if (choice === 'attack') {
         const result = await this.humanAttack(p);
@@ -622,13 +667,18 @@ export class Game {
     const from = await this.ui.pickCountry(sources, `Attack country ${to + 1} from where?`, true);
     this.ui.arrow(null);
     if (from === null) return 'done';
+    this.ui.log(
+      `${p.name} attacked country ${to + 1} (${this.st.armies[to]}) from country ${from + 1} (${this.st.armies[from]}).`,
+      'combat',
+    );
 
     // Auto-attack rolls without pausing until the battle resolves or reaches
-    // the brink — attacker down to 2 (next loss triggers the forfeit rule) or
-    // defender down to 1 — where pressing on is a real gamble and the player
-    // should decide each remaining clash by hand.
+    // the brink — attacker down to 2, where the next loss triggers the forfeit
+    // rule and pressing on is a real gamble the player should weigh by hand. A
+    // defender worn down to 1 is no reason to stop: the next win simply takes
+    // the country, so auto keeps rolling through it.
     let auto = false;
-    const atBrink = () => this.st.armies[from] <= 2 || this.st.armies[to] <= 1;
+    const atBrink = () => this.st.armies[from] <= 2;
     while (true) {
       this.ui.infoLeft(`Country ${from + 1} attacks ${to + 1}`);
       this.ui.infoRight(`${this.st.armies[from]} against ${this.st.armies[to]}`);
@@ -650,6 +700,7 @@ export class Game {
       }
       if (!this.canAttack(from, to)) {
         this.ui.toast('Your force is too thin to press the attack.');
+        this.ui.log(`${possessive(p.name)} assault on country ${to + 1} stalled — force too thin to press on.`, 'combat');
         return 'done';
       }
       // Keep rolling under auto until we reach the brink, then hand back control.
@@ -684,6 +735,7 @@ export class Game {
     if (amt === null) return false;
     this.st.armies[from] -= amt;
     this.st.armies[to] += amt;
+    this.ui.log(`${p.name} moved ${amt} ${amt === 1 ? 'army' : 'armies'} from country ${from + 1} to country ${to + 1}.`, 'info');
     this.ui.refresh();
     return true;
   }

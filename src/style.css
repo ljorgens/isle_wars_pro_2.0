@@ -76,14 +76,29 @@ button { font-family: inherit; cursor: pointer; }
   color: #ffe9e2;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
+/* Ghost = secondary button. Lives on the parchment bottom bar and in modals,
+   so it reads as ink-on-parchment with a real border — clearly clickable, just
+   quieter than primary. */
 .btn.ghost {
-  background: transparent;
+  background: rgba(20, 12, 2, 0.05);
+  color: var(--ink);
+  border: 1px solid var(--ink-soft);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 2px 0 rgba(20, 12, 2, 0.3);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.btn.ghost:hover { background: rgba(20, 12, 2, 0.12); }
+
+/* The Stop button sits on the dark topbar — keep it light-on-dark. */
+#btn-stop.btn.ghost {
+  background: rgba(200, 183, 138, 0.12);
   color: var(--brass);
-  border: 1px solid rgba(200, 183, 138, 0.5);
+  border-color: rgba(200, 183, 138, 0.5);
   box-shadow: none;
   text-shadow: none;
 }
-.btn.ghost:hover { background: rgba(200, 183, 138, 0.12); }
+#btn-stop.btn.ghost:hover { background: rgba(200, 183, 138, 0.22); }
 .btn.big { font-size: 1.2rem; padding: 0.8rem 2.2rem; }
 .btn.small { font-size: 0.8rem; padding: 0.3rem 0.7rem; }
 .btn.step { min-width: 3rem; }
@@ -237,6 +252,11 @@ table.scores th {
 /* ═══════════════════════ GAME SCREEN ═══════════════════════ */
 
 #game-screen {
+  min-height: 100vh;
+}
+
+/* The interactive play area fills the screen; the log sits just below the fold. */
+#play-area {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -538,6 +558,69 @@ table.scores th {
 #banner.war .b-title { color: #e06b5d; }
 #banner.storm .b-title { color: #8fd0ff; }
 
+/* Card reveal: flips up the card a human just drew. */
+#card-reveal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 10, 18, 0.55);
+  backdrop-filter: blur(1.5px);
+  z-index: 75;
+  opacity: 0;
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+#card-reveal.show { opacity: 1; }
+.reveal-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  transform: perspective(700px) rotateX(90deg) translateY(20px) scale(0.9);
+  opacity: 0;
+}
+#card-reveal.show .reveal-inner {
+  animation: card-flip 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2) forwards;
+}
+@keyframes card-flip {
+  to { transform: perspective(700px) rotateX(0) translateY(0) scale(1); opacity: 1; }
+}
+.reveal-cap {
+  font-family: var(--display);
+  letter-spacing: 0.18em;
+  color: var(--brass);
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+.reveal-card {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  padding: 1.6rem 2.2rem;
+  min-width: 230px;
+  background: linear-gradient(180deg, #f4ead2, #e1cfa6);
+  border: 1px solid #6e5616;
+  border-radius: 10px;
+  box-shadow: 0 0 0 3px var(--gold), 0 18px 50px rgba(0, 0, 0, 0.6);
+}
+.reveal-hint {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--parch-0);
+  font-size: 1.05rem;
+  max-width: 320px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+.reveal-inner.mutiny .reveal-card {
+  background: linear-gradient(180deg, #d0685c, var(--blood) 70%, #7e2b23);
+  color: #ffe6e1;
+  box-shadow: 0 0 0 3px #e06b5d, 0 18px 50px rgba(0, 0, 0, 0.6);
+}
+
 /* ═══════════════════════ MODALS ═══════════════════════ */
 
 [hidden] { display: none !important; }
@@ -662,6 +745,57 @@ table.scores th {
   color: var(--ink-soft);
   margin-top: 0.1rem;
 }
+
+/* Game log: a fixed-height history below the fold. Scroll down to reach it; it
+   scrolls inside itself, so the document is only ever one screen plus this panel
+   — the bottom never drifts farther away as the war unfolds. */
+#log-panel {
+  display: flex;
+  flex-direction: column;
+  height: 48vh;
+  background: linear-gradient(180deg, rgba(10, 23, 38, 0.96), rgba(7, 16, 26, 0.96));
+  border-top: 2px solid #8a734a;
+}
+.log-panel-head {
+  flex: none;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+  padding: 0.6rem 1.2rem 0.45rem;
+  border-bottom: 1px solid rgba(200, 183, 138, 0.22);
+}
+#log-stream {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.55rem 1.2rem 0.8rem;
+  font-size: 0.86rem;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  scroll-behavior: smooth;
+}
+#log-stream .log-turn {
+  font-family: var(--display);
+  letter-spacing: 0.06em;
+  text-align: center;
+  color: var(--brass);
+  margin: 0.55rem 0 0.32rem;
+  padding-bottom: 0.16rem;
+  border-bottom: 1px solid rgba(200, 183, 138, 0.2);
+}
+#log-stream .log-turn:first-child { margin-top: 0; }
+#log-stream .log-line {
+  line-height: 1.45;
+  padding: 0.08rem 0 0.08rem 0.6rem;
+  border-left: 2px solid transparent;
+  color: #cdd9e4;
+}
+#log-stream .log-combat { border-left-color: #e06b5d; }
+#log-stream .log-event { border-left-color: #d8a24a; font-style: italic; color: #e6d3ad; }
+#log-stream .log-card { border-left-color: var(--gold); }
+#log-stream .log-info { border-left-color: rgba(200, 183, 138, 0.4); color: #9fb4c6; }
 
 /* small screens */
 @media (max-width: 760px) {

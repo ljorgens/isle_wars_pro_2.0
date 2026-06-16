@@ -96,37 +96,48 @@
 
     <!-- ============ GAME SCREEN ============ -->
     <div id="game-screen" hidden>
-      <header id="topbar">
-        <div class="brand">TEMPEST ISLES</div>
-        <div id="players"></div>
-        <button class="btn ghost small" id="btn-stop" hidden>⏸ Stop Playing</button>
-      </header>
+      <!-- The play area fills the viewport; the fixed-height game log sits just
+           below the fold — scroll down to it, and it scrolls inside itself so
+           the page never grows past one screen-plus-the-panel. -->
+      <div id="play-area">
+        <header id="topbar">
+          <div class="brand">TEMPEST ISLES</div>
+          <div id="players"></div>
+          <button class="btn ghost small" id="btn-stop" hidden>⏸ Stop Playing</button>
+        </header>
 
-      <div id="map-wrap">
-        <svg id="map" role="img" aria-label="Map of the Tempest Isles"></svg>
+        <div id="map-wrap">
+          <svg id="map" role="img" aria-label="Map of the Tempest Isles"></svg>
+        </div>
+
+        <footer id="bottombar">
+          <div id="info-left" class="info-box"></div>
+          <div id="center-stack">
+            <div id="prompt"></div>
+            <div id="controls"></div>
+            <div id="ticker"></div>
+          </div>
+          <div id="info-right" class="info-box"></div>
+        </footer>
+
+        <nav id="menubar">
+          <button class="mbtn" id="m-new">New Game</button>
+          <button class="mbtn" id="m-help">Help</button>
+          <button class="mbtn" id="m-cards">Cards</button>
+          <button class="mbtn" id="m-scores">Scores</button>
+          <button class="mbtn" id="m-sound">Sound</button>
+          <button class="mbtn" id="m-quit">Quit</button>
+        </nav>
       </div>
 
-      <footer id="bottombar">
-        <div id="info-left" class="info-box"></div>
-        <div id="center-stack">
-          <div id="prompt"></div>
-          <div id="controls"></div>
-          <div id="ticker"></div>
-        </div>
-        <div id="info-right" class="info-box"></div>
-      </footer>
-
-      <nav id="menubar">
-        <button class="mbtn" id="m-new">New Game</button>
-        <button class="mbtn" id="m-help">Help</button>
-        <button class="mbtn" id="m-cards">Cards</button>
-        <button class="mbtn" id="m-scores">Scores</button>
-        <button class="mbtn" id="m-sound">Sound</button>
-        <button class="mbtn" id="m-quit">Quit</button>
-      </nav>
+      <section id="log-panel" aria-label="Game log">
+        <div class="log-panel-head">Game Log</div>
+        <div id="log-stream"></div>
+      </section>
     </div>
 
     <div id="banner"></div>
+    <div id="card-reveal" hidden></div>
     <div id="modal-scrim" hidden>
       <div id="modal"></div>
     </div>
